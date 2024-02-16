@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:smart_insti_app/constants/dummy_entries.dart';
 import 'dart:io';
 import '../constants/constants.dart';
 import '../models/course.dart';
@@ -15,6 +14,7 @@ class CoursesState {
   final List<Course> filteredCourses;
   final TextEditingController courseCodeController;
   final TextEditingController courseNameController;
+  final TextEditingController courseCreditController;
   final TextEditingController searchCourseController;
   final List<String> branches;
 
@@ -23,6 +23,7 @@ class CoursesState {
     required this.filteredCourses,
     required this.courseCodeController,
     required this.courseNameController,
+    required this.courseCreditController,
     required this.searchCourseController,
     required this.branches,
   });
@@ -33,6 +34,7 @@ class CoursesState {
     List<String>? branches,
     TextEditingController? courseCodeController,
     TextEditingController? courseNameController,
+    TextEditingController? courseCreditController,
     TextEditingController? searchCourseController,
   }) {
     return CoursesState(
@@ -40,6 +42,8 @@ class CoursesState {
       filteredCourses: filteredCourses ?? this.filteredCourses,
       courseCodeController: courseCodeController ?? this.courseCodeController,
       courseNameController: courseNameController ?? this.courseNameController,
+      courseCreditController:
+          courseCreditController ?? this.courseCreditController,
       searchCourseController:
           searchCourseController ?? this.searchCourseController,
       branches: branches ?? this.branches,
@@ -52,10 +56,11 @@ class CoursesNotifier extends StateNotifier<CoursesState> {
 
   static CoursesState _initialState() {
     return CoursesState(
-      courses: DummyCourses.courses,
+      courses: [],
       filteredCourses: [],
       courseCodeController: TextEditingController(),
       courseNameController: TextEditingController(),
+      courseCreditController: TextEditingController(),
       searchCourseController: TextEditingController(),
       branches: Branches.branchList.map((branch) => branch.value!).toList(),
     );
@@ -64,6 +69,8 @@ class CoursesNotifier extends StateNotifier<CoursesState> {
   get courseNameController => state.courseNameController;
 
   get courseCodeController => state.courseCodeController;
+
+  get courseCreditController => state.courseCreditController;
 
   get searchCourseController => state.searchCourseController;
 
@@ -114,6 +121,11 @@ class CoursesNotifier extends StateNotifier<CoursesState> {
       courseCode: state.courseCodeController.text,
       courseName: state.courseNameController.text,
       branches: state.branches,
+      credits: state.courseCreditController.text.isEmpty
+          ? 0
+          : int.parse(state.courseCreditController.text),
+      primaryRoom: '',
+      professorId: '',
     );
     state = state.copyWith(
       courses: [

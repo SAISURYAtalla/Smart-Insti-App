@@ -1,14 +1,14 @@
 **/.DS_Store
-
+.vscode/easycode.ignore
 ## Backend ignored file (Root level)
 backend/.DS_Store
 node_modules/
 backend/.env
+backend/.idea
+
 
 ## Frontend ignored file (Root level)
-
-
-## Frontend ignored file (Root level)
+frontend/.env
 
 # Miscellaneous
 frontend/*.class

@@ -1,18 +1,27 @@
 import mongoose from "mongoose";
 
 const adminSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        default: 'Smart Insti User'
+  name: {
+    required: true,
+    type: String,
+  },
+  email: {
+    required: true,
+    type: String,
+    validate: {
+      validator: (value) => {
+        const re =
+          /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        return value.match(re);
+      },
+      message: "Please enter a valid email address",
     },
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
+  },
+  password: {
+    required: true,
+    type: String,
+  },
 });
 
-const Admin = mongoose.model('Admin', adminSchema);
-
+const Admin = mongoose.model("Admin", adminSchema);
 export default Admin;
-
