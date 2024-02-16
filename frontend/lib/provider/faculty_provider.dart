@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'dart:io';
-import '../constants/dummy_entries.dart';
 import '../models/course.dart';
 import '../models/faculty.dart';
 
@@ -17,6 +16,8 @@ class FacultyState {
   final List<Course> selectedCourses;
   final TextEditingController facultyNameController;
   final TextEditingController facultyEmailController;
+  final TextEditingController facultyDepartmentController;
+  final TextEditingController facultyCabinNumberController;
   final TextEditingController searchFacultyController;
 
   FacultyState({
@@ -26,6 +27,8 @@ class FacultyState {
     required this.facultyNameController,
     required this.facultyEmailController,
     required this.searchFacultyController,
+    required this.facultyDepartmentController,
+    required this.facultyCabinNumberController,
   });
 
   FacultyState copyWith({
@@ -35,6 +38,8 @@ class FacultyState {
     TextEditingController? facultyNameController,
     TextEditingController? facultyEmailController,
     TextEditingController? searchFacultyController,
+    TextEditingController? facultyDepartmentController,
+    TextEditingController? facultyCabinNumberController,
   }) {
     return FacultyState(
       faculties: faculties ?? this.faculties,
@@ -44,6 +49,10 @@ class FacultyState {
           facultyNameController ?? this.facultyNameController,
       facultyEmailController:
           facultyEmailController ?? this.facultyEmailController,
+      facultyCabinNumberController:
+          facultyCabinNumberController ?? this.facultyCabinNumberController,
+      facultyDepartmentController:
+          facultyDepartmentController ?? this.facultyDepartmentController,
       searchFacultyController:
           searchFacultyController ?? this.searchFacultyController,
     );
@@ -53,11 +62,13 @@ class FacultyState {
 class FacultyStateNotifier extends StateNotifier<FacultyState> {
   FacultyStateNotifier()
       : super(FacultyState(
-          faculties: DummyFaculties.faculties,
+          faculties: [],
           filteredFaculties: [],
           selectedCourses: [],
           facultyNameController: TextEditingController(),
           facultyEmailController: TextEditingController(),
+          facultyCabinNumberController: TextEditingController(),
+          facultyDepartmentController: TextEditingController(),
           searchFacultyController: TextEditingController(),
         ));
 
@@ -68,6 +79,10 @@ class FacultyStateNotifier extends StateNotifier<FacultyState> {
   get facultyEmailController => state.facultyEmailController;
 
   get searchFacultyController => state.searchFacultyController;
+
+  get facultyCabinNumberController => state.facultyCabinNumberController;
+
+  get facultyDepartmentController => state.facultyDepartmentController;
 
   void pickSpreadsheet() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
@@ -95,12 +110,16 @@ class FacultyStateNotifier extends StateNotifier<FacultyState> {
       name: state.facultyNameController.text,
       email: state.facultyEmailController.text,
       courses: state.selectedCourses,
+      cabinNumber: state.facultyCabinNumberController.text,
+      department: state.facultyDepartmentController.text,
     );
     state = state.copyWith(
       faculties: [faculty, ...state.faculties],
       selectedCourses: [],
       facultyNameController: TextEditingController(),
       facultyEmailController: TextEditingController(),
+      facultyCabinNumberController: TextEditingController(),
+      facultyDepartmentController: TextEditingController(),
     );
     _logger.i("Added faculty: ${faculty.name}");
   }

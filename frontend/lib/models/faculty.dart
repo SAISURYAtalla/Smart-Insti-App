@@ -4,13 +4,17 @@ class Faculty {
   final String id;
   final String name;
   final String email;
-  final List<Course> courses;
+  final String? cabinNumber;
+  final String? department;
+  final List<Course>? courses;
 
   Faculty({
     required this.id,
     required this.name,
     required this.email,
-    required this.courses,
+    this.cabinNumber,
+    this.department,
+    this.courses,
   });
 
   factory Faculty.fromJson(Map<String, dynamic> json) {
@@ -18,9 +22,13 @@ class Faculty {
       id: json['_id'],
       name: json['name'] ?? 'Smart Insti User',
       email: json['email'],
-      courses: (json['courses'] as List)
-          .map((item) => Course.fromJson(item))
-          .toList(),
+      cabinNumber: json['cabinNumber'],
+      department: json['department'],
+      courses: json['courses'] != null
+          ? (json['courses'] as List)
+              .map((item) => Course.fromJson(item))
+              .toList()
+          : [],
     );
   }
 
@@ -29,7 +37,11 @@ class Faculty {
       '_id': id,
       'name': name,
       'email': email,
-      'courses': courses,
+      'cabinNumber': cabinNumber,
+      'department': department,
+      'courses': courses != null
+          ? courses!.map((course) => course.toJson()).toList()
+          : [],
     };
   }
 }
